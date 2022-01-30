@@ -1,0 +1,11 @@
+database:
+  username: 'admin'
+  password: 'admin2'
+
+tags:
+  blockedTags:
+    - penis
+    - sex
+    - porn
+    - fuck
+    - shit

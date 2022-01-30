@@ -1,0 +1,11 @@
+name: Azazel
+version: '${project.version}'
+main: net.lotho.Azazel
+api-version: 1.18
+authors: [ Lotho ]
+
+commands:
+  tags:
+    aliases: [tag]
+  tokens:
+    aliases: [token]
