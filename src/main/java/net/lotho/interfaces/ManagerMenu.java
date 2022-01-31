@@ -25,11 +25,11 @@ public class ManagerMenu {
 
         inventoryName = "» Manager Functions";
         inventory = this.instance.getServer().createInventory(null, 27, inventoryName);
-
-        setupItems();
     }
 
     public void open(Player player) {
+        setupItems();
+
         player.openInventory(this.inventory);
     }
 
