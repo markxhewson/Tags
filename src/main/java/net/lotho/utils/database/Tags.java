@@ -21,7 +21,7 @@ public class Tags {
     public boolean checkUser(final UUID uuid) {
         boolean[] exists = new boolean[1];
 
-        this.instance.getMySQLManager().select("SELECT * FROM players WHERE uuid=?", resultSet -> {
+        this.instance.getMySQLManager().select("SELECT uuid FROM players WHERE uuid=?", resultSet -> {
             try {
                 if (resultSet.next()) {
                     if (resultSet.getString("uuid") != null) exists[0] = true;
@@ -43,7 +43,7 @@ public class Tags {
     public ArrayList<String> fetchTags(final UUID uuid) {
         ArrayList<String> tags = new ArrayList<>();
 
-        this.instance.getMySQLManager().select("SELECT * FROM tags WHERE ownerUUID=?", resultSet -> {
+        this.instance.getMySQLManager().select("SELECT name FROM tags WHERE ownerUUID=?", resultSet -> {
             try {
                 while (resultSet.next()) {
                     tags.add(resultSet.getString("name"));
@@ -85,7 +85,7 @@ public class Tags {
     public void deleteTag(String name, UUID uuid) {
         String[] tagToDelete = new String[1];
 
-        this.instance.getMySQLManager().select("SELECT * FROM tags WHERE ownerUUID=?", resultSet -> {
+        this.instance.getMySQLManager().select("SELECT name FROM tags WHERE ownerUUID=?", resultSet -> {
             try {
                 while (resultSet.next()) {
                     if (ChatColor.stripColor(Chat.color(resultSet.getString("name"))).equals(name)) {
@@ -120,7 +120,7 @@ public class Tags {
     public String adminGetActiveTag(final UUID uuid) {
         String[] activeTag = new String[1];
 
-        this.instance.getMySQLManager().select("SELECT * FROM players WHERE uuid=?", resultSet -> {
+        this.instance.getMySQLManager().select("SELECT name FROM players WHERE uuid=?", resultSet -> {
             try {
                 if (resultSet.next()) {
                     activeTag[0] = resultSet.getString("name");
