@@ -27,6 +27,7 @@ import java.util.UUID;
 public final class Azazel extends JavaPlugin {
 
     public HashMap<String, UUID> playerUUIDs = new HashMap<>();
+    public HashMap<UUID, HashMap<String, Object>> playerInterfaces = new HashMap<>();
 
     @Getter
     public static Azazel instance;
@@ -59,7 +60,7 @@ public final class Azazel extends JavaPlugin {
         for (Player online : this.getServer().getOnlinePlayers()) {
             this.userManager.handleProfileCreation(online.getUniqueId(), 0);
 
-            User user = this.getUserManager().getUser(online);;
+            User user = this.getUserManager().getUser(online);
 
             try {
                 this.getServer().getScheduler().runTaskAsynchronously(this, () -> user.getData().load(online));
