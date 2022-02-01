@@ -73,6 +73,8 @@ public final class Azazel extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        super.onDisable();
+
         mySQLManager.disconnect();
     }
 }

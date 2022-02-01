@@ -45,7 +45,7 @@ public class UpdateUser implements Listener {
         try {
             this.instance.getServer().getScheduler().runTaskAsynchronously(this.instance, () -> user.getData().load(player));
         } catch (NullPointerException e) {
-            player.kickPlayer("ERROR: Profile could not be loaded.");
+            e.printStackTrace();
         }
     }
 
