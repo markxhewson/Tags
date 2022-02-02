@@ -31,6 +31,7 @@ public class MySQLManager extends Manager {
             String url = this.instance.configManager.getConfigFile().getString("database.url");
             String username = this.instance.configManager.getConfigFile().getString("database.username");
             String password = this.instance.configManager.getConfigFile().getString("database.password");
+
             this.setConnection(DriverManager.getConnection(url, username, password));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,6 +58,7 @@ public class MySQLManager extends Manager {
                 String url = this.instance.configManager.getConfigFile().getString("database.url");
                 String username = this.instance.configManager.getConfigFile().getString("database.username");
                 String password = this.instance.configManager.getConfigFile().getString("database.password");
+
                 this.setConnection(DriverManager.getConnection(url, username, password));
             }
         } catch (SQLException e) {

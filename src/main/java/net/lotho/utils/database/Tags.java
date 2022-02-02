@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Tags {
@@ -40,13 +41,13 @@ public class Tags {
         return exists[0];
     }
 
-    public ArrayList<String> fetchTags(final UUID uuid) {
-        ArrayList<String> tags = new ArrayList<>();
+    public HashMap<Integer, String> fetchTags(final UUID uuid) {
+        HashMap<Integer, String> tags = new HashMap<>();
 
-        this.instance.getMySQLManager().select("SELECT name FROM tags WHERE ownerUUID=?", resultSet -> {
+        this.instance.getMySQLManager().select("SELECT id, name FROM tags WHERE ownerUUID=?", resultSet -> {
             try {
                 while (resultSet.next()) {
-                    tags.add(resultSet.getString("name"));
+                    tags.put(resultSet.getInt("id"), resultSet.getString("name"));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -58,7 +59,6 @@ public class Tags {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(tags);
 
         return tags;
     }

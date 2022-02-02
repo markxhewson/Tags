@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TagsMenu {
     private final Azazel instance;
@@ -33,7 +34,7 @@ public class TagsMenu {
     private void setupItems(Player player) {
         this.inventory.clear();
 
-        ArrayList<String> playerTags = this.instance.tags.fetchTags(player.getUniqueId());
+        HashMap<Integer, String> playerTags = this.instance.tags.fetchTags(player.getUniqueId());
 
         this.inventory.setItem(45, GUI.createItem(Material.ARROW, "&7&lBack", Chat.color("&7Right click to go back to the tags menu.")));
 
@@ -50,12 +51,13 @@ public class TagsMenu {
             this.inventory.setItem(22, null);
             this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable Tag", Chat.color("&7Right click to disable"), Chat.color("&7your current tag.")));
 
-            for (int i = 0; i < playerTags.size(); i++) {
-                int index = i +9;
-                if (this.inventory.getItem(index) == null) {
-                    this.inventory.setItem(index, GUI.createItem(Material.NAME_TAG,"&a» " + playerTags.get(i), Chat.color("&7Right click to activate!")));
+            final int[] index = {9};
+            playerTags.forEach((id, name) -> {
+                if (this.inventory.getItem(index[0]) == null) {
+                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name + "&7(" + id + ")", Chat.color("&7Right click to activate!")));
                 }
-            }
+                index[0]++;
+            });
         }
     }
 
