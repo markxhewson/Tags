@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -58,7 +57,7 @@ public class ManagerTagMenu {
             final int[] index = {9};
             playerTags.forEach((id, name) -> {
                 if (this.inventory.getItem(index[0]) == null) {
-                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name + " &7(" + id.toString() +")", "", Chat.color("&c&o(Right click to revoke from user)")));
+                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name, Chat.color("&cRight click to revoke from user!")));
                 }
                 index[0]++;
             });
@@ -81,9 +80,7 @@ public class ManagerTagMenu {
                         }
                     }
                     else {
-                        if (user.getData().getActiveTag() != null) {
-                            if (ChatColor.stripColor(Chat.color(user.getData().getActiveTag())).equals(ChatColor.stripColor(tagName))) user.getData().setActiveTag(null);
-                        }
+                        if (ChatColor.stripColor(Chat.color(user.getData().getActiveTag())).equals(ChatColor.stripColor(tagName))) user.getData().setActiveTag(null);
                     }
 
                     clicker.sendMessage(Chat.color("&a&lSuccess! &7You have &crevoked &7the &a" + tagName + " &7tag from user!"));
