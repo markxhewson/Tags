@@ -28,9 +28,10 @@ public class MySQLManager extends Manager {
 
     public void connect() {
         try {
+            String url = this.instance.configManager.getConfigFile().getString("database.url");
             String username = this.instance.configManager.getConfigFile().getString("database.username");
             String password = this.instance.configManager.getConfigFile().getString("database.password");
-            this.setConnection(DriverManager.getConnection("jdbc:mysql://192.168.0.129:3306/tags?characterEncoding=utf8", username, password));
+            this.setConnection(DriverManager.getConnection(url, username, password));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,7 +54,10 @@ public class MySQLManager extends Manager {
     public Connection getConnection() {
         try {
             if (this.connection == null || this.connection.isClosed()) {
-                this.setConnection(DriverManager.getConnection("jdbc:mysql://192.168.0.129:3306/tags?characterEncoding=utf8", "admin", "admin2"));
+                String url = this.instance.configManager.getConfigFile().getString("database.url");
+                String username = this.instance.configManager.getConfigFile().getString("database.username");
+                String password = this.instance.configManager.getConfigFile().getString("database.password");
+                this.setConnection(DriverManager.getConnection(url, username, password));
             }
         } catch (SQLException e) {
             e.printStackTrace();
