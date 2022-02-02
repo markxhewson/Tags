@@ -89,6 +89,8 @@ public class TokensMenu {
                 break;
 
             case BARRIER: // manager functions for tags
+                clicker.closeInventory();
+
                 ManagerMenu managerMenu = (ManagerMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerMenu");
                 managerMenu.open(clicker);
 
