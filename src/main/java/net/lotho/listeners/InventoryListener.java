@@ -15,32 +15,32 @@ public class InventoryListener implements Listener {
 
     private final Azazel instance = Azazel.getInstance();
 
-    public TokensMenu tokensMenu = new TokensMenu(this.instance);
-    public TagsMenu tagsMenu = new TagsMenu(this.instance);
-    public ManagerMenu managerMenu = new ManagerMenu(this.instance);
-    public ManagerTagMenu managerTagMenu = new ManagerTagMenu(this.instance);
-
     @EventHandler
     public void inventoryListen(InventoryClickEvent e) {
         Inventory inventory = e.getInventory();
 
-        if (this.tokensMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
-            this.tokensMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
+        TokensMenu tokensMenu = (TokensMenu) this.instance.playerInterfaces.get(e.getWhoClicked().getUniqueId()).get("tokensMenu");
+        TagsMenu tagsMenu = (TagsMenu) this.instance.playerInterfaces.get(e.getWhoClicked().getUniqueId()).get("tagsMenu");
+        ManagerMenu managerMenu = (ManagerMenu) this.instance.playerInterfaces.get(e.getWhoClicked().getUniqueId()).get("managerMenu");
+        ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(e.getWhoClicked().getUniqueId()).get("managerTagMenu");
+
+        if (tokensMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
+            tokensMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
 
             e.setCancelled(true);
         }
-        else if (this.tagsMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
-            this.tagsMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
+        else if (tagsMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
+            tagsMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
 
             e.setCancelled(true);
         }
-        else if (this.managerMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
-            this.managerMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
+        else if (managerMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
+            managerMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
 
             e.setCancelled(true);
         }
-        else if (this.managerTagMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
-            this.managerTagMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
+        else if (managerTagMenu.inventoryName.equals(inventory.getName()) && e.getCurrentItem() != null) {
+            managerTagMenu.handleClick(inventory, (Player) e.getWhoClicked(), e.getCurrentItem(), e.getSlot());
 
             e.setCancelled(true);
         }

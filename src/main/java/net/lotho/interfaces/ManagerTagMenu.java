@@ -84,22 +84,27 @@ public class ManagerTagMenu {
                     clicker.sendMessage(Chat.color("&a&lSuccess! &7You have &crevoked &7the &a" + tagName + " &7tag from user!"));
                     clicker.closeInventory();
 
-                    this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> new ManagerTagMenu(this.instance).open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner), 10);
+                    this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> {
+                        ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerTagMenu");
+                        managerTagMenu.open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner);
+                        this.instance.playerInterfaces.get(clicker.getUniqueId()).put("managerTagMenu", managerTagMenu);
+                    }, 10);
                 }
                 break;
 
             case ARROW:
                 clicker.closeInventory();
-                new ManagerMenu(this.instance).open(clicker);
+
+                ManagerMenu managerMenu = (ManagerMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerMenu");
+                managerMenu.open(clicker);
                 break;
 
             case BARRIER:
                 User user = this.instance.getUserManager().getUser(this.tagOwner);
-                if (user == null) {
-                    this.instance.tags.adminDisableTag(this.tagOwner);
-                } else {
-                    user.getData().setActiveTag(null);
-                }
+
+                if (user == null) this.instance.tags.adminDisableTag(this.tagOwner);
+                else user.getData().setActiveTag(null);
+
                 clicker.sendMessage(Chat.color("&a&lSuccess! &7You have disabled the users tag!"));
                 clicker.closeInventory();
         }

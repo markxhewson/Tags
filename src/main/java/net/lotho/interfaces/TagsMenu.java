@@ -75,7 +75,9 @@ public class TagsMenu {
 
             case ARROW:
                 clicker.closeInventory();
-                new TokensMenu(this.instance).open(clicker);
+
+                TokensMenu tokensMenu = (TokensMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("tokensMenu");
+                tokensMenu.open(clicker);
                 break;
 
             case BARRIER:
