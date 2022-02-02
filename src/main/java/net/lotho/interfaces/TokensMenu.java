@@ -82,11 +82,18 @@ public class TokensMenu {
 
             case NAME_TAG: // view your tags
                 clicker.closeInventory();
-                new TagsMenu(this.instance).open(clicker);
+
+
+                TagsMenu tagsMenu = (TagsMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("tagsMenu");
+                tagsMenu.open(clicker);
                 break;
 
             case BARRIER: // manager functions for tags
-                new ManagerMenu(this.instance).open(clicker);
+                clicker.closeInventory();
+
+                ManagerMenu managerMenu = (ManagerMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerMenu");
+                managerMenu.open(clicker);
+
                 break;
 
         }

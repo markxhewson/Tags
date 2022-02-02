@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class ManagerTagMenu {
@@ -28,14 +29,14 @@ public class ManagerTagMenu {
         inventory = this.instance.getServer().createInventory(null, 54, inventoryName);
     }
 
-    public void open(Player player, ArrayList<String> userTags, UUID tagOwner) {
+    public void open(Player player, HashMap<Integer, String> userTags, UUID tagOwner) {
         setupItems(userTags);
 
         this.tagOwner = tagOwner;
         player.openInventory(this.inventory);
     }
 
-    public void setupItems(ArrayList<String> playerTags) {
+    public void setupItems(HashMap<Integer, String> playerTags) {
         this.inventory.clear();
 
         this.inventory.setItem(45, GUI.createItem(Material.ARROW, "&7&lBack", Chat.color("&7Right click to go back to the manager menu.")));
@@ -53,12 +54,13 @@ public class ManagerTagMenu {
             this.inventory.setItem(22, null);
             this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable User Tag", Chat.color("&7Right click to disable their"), Chat.color("&7current active tag.")));
 
-            for (int i = 0; i < playerTags.size(); i++) {
-                int index = i +9;
-                if (this.inventory.getItem(index) == null) {
-                    this.inventory.setItem(index, GUI.createItem(Material.NAME_TAG,"&a» " + playerTags.get(i), Chat.color("&cRight click to revoke from user!")));
+            final int[] index = {9};
+            playerTags.forEach((id, name) -> {
+                if (this.inventory.getItem(index[0]) == null) {
+                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name, Chat.color("&cRight click to revoke from user!")));
                 }
-            }
+                index[0]++;
+            });
         }
     }
 
@@ -84,22 +86,27 @@ public class ManagerTagMenu {
                     clicker.sendMessage(Chat.color("&a&lSuccess! &7You have &crevoked &7the &a" + tagName + " &7tag from user!"));
                     clicker.closeInventory();
 
-                    this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> new ManagerTagMenu(this.instance).open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner), 10);
+                    this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> {
+                        ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerTagMenu");
+                        managerTagMenu.open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner);
+                        this.instance.playerInterfaces.get(clicker.getUniqueId()).put("managerTagMenu", managerTagMenu);
+                    }, 10);
                 }
                 break;
 
             case ARROW:
                 clicker.closeInventory();
-                new ManagerMenu(this.instance).open(clicker);
+
+                ManagerMenu managerMenu = (ManagerMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerMenu");
+                managerMenu.open(clicker);
                 break;
 
             case BARRIER:
                 User user = this.instance.getUserManager().getUser(this.tagOwner);
-                if (user == null) {
-                    this.instance.tags.adminDisableTag(this.tagOwner);
-                } else {
-                    user.getData().setActiveTag(null);
-                }
+
+                if (user == null) this.instance.tags.adminDisableTag(this.tagOwner);
+                else user.getData().setActiveTag(null);
+
                 clicker.sendMessage(Chat.color("&a&lSuccess! &7You have disabled the users tag!"));
                 clicker.closeInventory();
         }

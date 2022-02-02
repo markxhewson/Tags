@@ -89,7 +89,9 @@ public class ManagerMenu {
                                 if (uuid != null) {
                                     boolean playerExists = this.instance.tags.checkUser(uuid);
                                     if (playerExists) {
-                                        new ManagerTagMenu(this.instance).open(clicker, this.instance.tags.fetchTags(uuid), uuid);
+                                        ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerTagMenu");
+                                        managerTagMenu.open(clicker, this.instance.tags.fetchTags(uuid), uuid);
+                                        this.instance.playerInterfaces.get(clicker.getUniqueId()).put("managerTagMenu", managerTagMenu);
                                     } else {
                                         player.sendMessage(Chat.color("&c&lError! &7I could not find that player in the database."));
                                     }
@@ -109,7 +111,9 @@ public class ManagerMenu {
 
             case ARROW:
                 clicker.closeInventory();
-                new TokensMenu(this.instance).open(clicker);
+
+                TokensMenu tokensMenu = (TokensMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("tokensMenu");
+                tokensMenu.open(clicker);
                 break;
         }
     }
