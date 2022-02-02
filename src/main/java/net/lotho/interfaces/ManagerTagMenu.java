@@ -57,7 +57,7 @@ public class ManagerTagMenu {
             final int[] index = {9};
             playerTags.forEach((id, name) -> {
                 if (this.inventory.getItem(index[0]) == null) {
-                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name + "&7(" + id + ")", Chat.color("&cRight click to revoke from user!")));
+                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name, Chat.color("&cRight click to revoke from user!")));
                 }
                 index[0]++;
             });

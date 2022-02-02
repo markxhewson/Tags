@@ -54,7 +54,7 @@ public class TagsMenu {
             final int[] index = {9};
             playerTags.forEach((id, name) -> {
                 if (this.inventory.getItem(index[0]) == null) {
-                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name + "&7(" + id + ")", Chat.color("&7Right click to activate!")));
+                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name, Chat.color("&7Right click to activate!")));
                 }
                 index[0]++;
             });
