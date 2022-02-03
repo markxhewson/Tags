@@ -5,9 +5,4 @@ database:
   password: 'admin2'
 
 tags:
-  blockedTags:
-    - penis
-    - sex
-    - porn
-    - fuck
-    - shit
+  blockedTags: []

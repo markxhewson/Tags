@@ -92,7 +92,6 @@ public class ManagerTagMenu {
                     this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> {
                         ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerTagMenu");
                         managerTagMenu.open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner);
-                        this.instance.playerInterfaces.get(clicker.getUniqueId()).put("managerTagMenu", managerTagMenu);
                     }, 10);
                 }
                 break;
