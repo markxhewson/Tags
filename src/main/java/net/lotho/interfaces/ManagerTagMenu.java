@@ -18,26 +18,31 @@ import java.util.UUID;
 public class ManagerTagMenu {
     private final Azazel instance;
 
+    protected int maxItemsPerPage;
+    protected int page;
+
     public String inventoryName;
-    private final Inventory inventory;
-    private UUID tagOwner;
+    protected final Inventory inventory;
+    protected UUID tagOwner;
 
     public ManagerTagMenu(Azazel instance) {
         this.instance = instance;
         this.tagOwner = null;
+        this.maxItemsPerPage = 35;
+        this.page = 0;
 
         inventoryName = "» Modify User Tags";
         inventory = this.instance.getServer().createInventory(null, 54, inventoryName);
     }
 
-    public void open(Player player, HashMap<Integer, String> userTags, UUID tagOwner) {
+    public void open(Player player, ArrayList<String> userTags, UUID tagOwner) {
         setupItems(userTags);
 
         this.tagOwner = tagOwner;
         player.openInventory(this.inventory);
     }
 
-    public void setupItems(HashMap<Integer, String> playerTags) {
+    public void setupItems(ArrayList<String> playerTags) {
         this.inventory.clear();
 
         this.inventory.setItem(45, GUI.createItem(Material.ARROW, "&7&lBack", Chat.color("&7Right click to go back to the manager menu.")));
@@ -55,13 +60,10 @@ public class ManagerTagMenu {
             this.inventory.setItem(22, null);
             this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable User Tag", Chat.color("&7Right click to disable their"), Chat.color("&7current active tag.")));
 
-            final int[] index = {9};
-            playerTags.forEach((id, name) -> {
-                if (this.inventory.getItem(index[0]) == null) {
-                    this.inventory.setItem(index[0], GUI.createItem(Material.NAME_TAG,"&a» " + name + " &7(" + id.toString() +")", "", Chat.color("&c&o(Right click to revoke from user)")));
-                }
-                index[0]++;
-            });
+            for (int i = 0; i < playerTags.size(); i++) {
+                int itemIndex = this.maxItemsPerPage * page + i;
+                this.inventory.addItem(GUI.createItem(Material.NAME_TAG, "&a» " + playerTags.get(itemIndex), "", Chat.color("&c&o(Right click to revoke from user!)")));
+            };
         }
     }
 
