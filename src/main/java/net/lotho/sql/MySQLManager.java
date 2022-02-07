@@ -10,12 +10,15 @@ import java.sql.SQLException;
 
 public class MySQLManager extends Manager {
 
-    private Azazel instance;
-    public Connection connection;
+    protected Azazel instance;
+    protected Connection connection;
+    protected String databaseURL;
 
     public MySQLManager(Azazel instance) {
         super(instance);
         this.instance = instance;
+
+        this.databaseURL = this.instance.configManager.getConfigFile().getString("database.local-url");
 
         this.connect();
         this.createTables();
@@ -28,11 +31,10 @@ public class MySQLManager extends Manager {
 
     public void connect() {
         try {
-            String url = this.instance.configManager.getConfigFile().getString("database.url");
             String username = this.instance.configManager.getConfigFile().getString("database.username");
             String password = this.instance.configManager.getConfigFile().getString("database.password");
 
-            this.setConnection(DriverManager.getConnection(url, username, password));
+            this.setConnection(DriverManager.getConnection(this.databaseURL, username, password));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -55,11 +57,10 @@ public class MySQLManager extends Manager {
     public Connection getConnection() {
         try {
             if (this.connection == null || this.connection.isClosed()) {
-                String url = this.instance.configManager.getConfigFile().getString("database.url");
                 String username = this.instance.configManager.getConfigFile().getString("database.username");
                 String password = this.instance.configManager.getConfigFile().getString("database.password");
 
-                this.setConnection(DriverManager.getConnection(url, username, password));
+                this.setConnection(DriverManager.getConnection(this.databaseURL, username, password));
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -41,13 +41,13 @@ public class Tags {
         return exists[0];
     }
 
-    public HashMap<Integer, String> fetchTags(final UUID uuid) {
-        HashMap<Integer, String> tags = new HashMap<>();
+    public ArrayList<String> fetchTags(final UUID uuid) {
+        ArrayList<String> tags = new ArrayList<>();
 
         this.instance.getMySQLManager().select("SELECT id, name FROM tags WHERE ownerUUID=?", resultSet -> {
             try {
                 while (resultSet.next()) {
-                    tags.put(resultSet.getInt("id"), resultSet.getString("name"));
+                    tags.add(resultSet.getString("name"));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
