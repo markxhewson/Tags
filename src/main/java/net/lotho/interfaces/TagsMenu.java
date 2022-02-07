@@ -58,7 +58,7 @@ public class TagsMenu {
         }
 
         if (playerTags.size() < 1) {
-            this.inventory.setItem(22, GUI.createItemShort(Material.INK_SACK, 1, "&cYou do not have any tags!", Chat.color("&7You can aquire tokens to create"), Chat.color("&7tags to show off to your friends!")));
+            this.inventory.setItem(22, GUI.createItemShort(Material.INK_SACK, 1, "&cYou do not have any tags!", Chat.color("&7You can acquire tokens to create"), Chat.color("&7tags to show off to your friends!")));
         } else {
             this.inventory.setItem(22, null);
             this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable Tag", Chat.color("&7Right click to disable"), Chat.color("&7your current tag.")));
@@ -101,6 +101,7 @@ public class TagsMenu {
                         open(clicker);
                     }
                 }
+                break;
 
             case ARROW:
                 clicker.closeInventory();
