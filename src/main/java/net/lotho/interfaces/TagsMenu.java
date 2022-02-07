@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class TagsMenu {
     private final Azazel instance;
 
-    public final String inventoryName;
+    public String inventoryName;
     protected final Inventory inventory;
 
     protected int maxItemsPerPage;
@@ -25,12 +25,12 @@ public class TagsMenu {
 
     public TagsMenu(Azazel instance) {
         this.instance = instance;
-        this.maxItemsPerPage = 35;
+        this.maxItemsPerPage = 36;
         this.page = 0;
         this.maxPages = 0;
 
-        inventoryName = "» Your Tags";
-        inventory = this.instance.getServer().createInventory(null, 54, inventoryName);
+        this.inventoryName = "» Your Tags";
+        this.inventory = this.instance.getServer().createInventory(null, 54, inventoryName);
     }
 
     public void open(Player player) {
@@ -45,10 +45,11 @@ public class TagsMenu {
         ArrayList<String> playerTags = this.instance.tags.fetchTags(player.getUniqueId());
         this.maxPages = playerTags.size() / this.maxItemsPerPage;
 
-        this.inventory.setItem(45, GUI.createItem(Material.ARROW, "&7&lBack", Chat.color("&7Right click to go back to the tags menu.")));
-        this.inventory.setItem(48, GUI.createItem(Material.FENCE_GATE, "&aPrevious Page", Chat.color("&7Click to go to the previous page")));
+        this.inventory.setItem(4, GUI.createItem(Material.EMERALD, "&a&lYour Tags", Chat.color("&7You are viewing your tags.")));
+        this.inventory.setItem(45, GUI.createItem(Material.ARROW, "&7&lBack", Chat.color("&7Click to go back to the tags menu.")));
+        this.inventory.setItem(48, GUI.createItem(Material.FENCE_GATE, "&aPrevious Page", Chat.color("&7Click to go to the previous page.")));
         this.inventory.setItem(49, GUI.createItem(Material.BLAZE_ROD, "&a&lPage", Chat.color("&7You are on page " + (this.page + 1) + "/" + (this.maxPages + 1))));
-        this.inventory.setItem(50, GUI.createItem(Material.FENCE_GATE, "&aNext Page", Chat.color("&7Click to go to the next page")));
+        this.inventory.setItem(50, GUI.createItem(Material.FENCE_GATE, "&aNext Page", Chat.color("&7Click to go to the next page.")));
 
         for (int i = 0; i < this.inventory.getSize(); i++) {
             if (i < 9 && this.inventory.getItem(i) == null) this.inventory.setItem(i, GUI.createItemShort(Material.STAINED_GLASS_PANE, 7, " "));
@@ -61,11 +62,14 @@ public class TagsMenu {
             this.inventory.setItem(22, GUI.createItemShort(Material.INK_SACK, 1, "&cYou do not have any tags!", Chat.color("&7You can acquire tokens to create"), Chat.color("&7tags to show off to your friends!")));
         } else {
             this.inventory.setItem(22, null);
-            this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable Tag", Chat.color("&7Right click to disable"), Chat.color("&7your current tag.")));
+            this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable Tag", Chat.color("&7Click to disable"), Chat.color("&7your current tag.")));
 
-            for (int i = 0; i < playerTags.size(); i++) {
+            for (int i = 0; i < this.maxItemsPerPage; i++) {
                 int itemIndex = this.maxItemsPerPage * page + i;
-                this.inventory.addItem(GUI.createItem(Material.NAME_TAG, "&a» " + playerTags.get(itemIndex), "", Chat.color("&7&o(Right click to activate)")));
+                if (itemIndex >= playerTags.size()) break;
+                if (playerTags.get(itemIndex) != null) {
+                    this.inventory.addItem(GUI.createItem(Material.NAME_TAG, "&a» " + playerTags.get(itemIndex), "", Chat.color("&7&o(Click to activate)")));
+                }
             };
         }
     }
@@ -86,17 +90,13 @@ public class TagsMenu {
 
             case FENCE_GATE:
                 if (ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName()).contains("Next Page")) {
-                    if (this.page >= this.maxPages) {
-                        clicker.sendMessage(Chat.color("&c&lError! &7You are already on the last page."));
-                    } else {
+                    if (this.page < this.maxPages) {
                         this.page += 1;
                         open(clicker);
                     }
                 }
                 else if (ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName()).contains("Previous Page")) {
-                    if (this.page <= 2) {
-                        clicker.sendMessage(Chat.color("&c&lError! &7You are already on the first page!"));
-                    } else {
+                    if (this.page > 0) {
                         this.page -= 1;
                         open(clicker);
                     }

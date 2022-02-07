@@ -62,6 +62,15 @@ public final class Azazel extends JavaPlugin {
 
             User user = this.getUserManager().getUser(online);
 
+            HashMap<String, Object> interfaces = new HashMap<>();
+            interfaces.put("managerMenu", new ManagerMenu(this));
+            interfaces.put("managerTagMenu", new ManagerTagMenu(this));
+            interfaces.put("tagsMenu", new TagsMenu(this));
+            interfaces.put("tokensMenu", new TokensMenu(this));
+
+            this.playerInterfaces.put(online.getUniqueId(), interfaces);
+
+
             try {
                 this.getServer().getScheduler().runTaskAsynchronously(this, () -> user.getData().load(online));
             } catch (NullPointerException e) {

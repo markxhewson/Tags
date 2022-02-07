@@ -20,6 +20,7 @@ public class ManagerTagMenu {
 
     protected int maxItemsPerPage;
     protected int page;
+    protected int maxPages;
 
     public String inventoryName;
     protected final Inventory inventory;
@@ -28,7 +29,8 @@ public class ManagerTagMenu {
     public ManagerTagMenu(Azazel instance) {
         this.instance = instance;
         this.tagOwner = null;
-        this.maxItemsPerPage = 35;
+        this.maxItemsPerPage = 36;
+        this.maxPages = 0;
         this.page = 0;
 
         inventoryName = "» Modify User Tags";
@@ -45,10 +47,16 @@ public class ManagerTagMenu {
     public void setupItems(ArrayList<String> playerTags) {
         this.inventory.clear();
 
-        this.inventory.setItem(45, GUI.createItem(Material.ARROW, "&7&lBack", Chat.color("&7Right click to go back to the manager menu.")));
+        this.maxPages = playerTags.size() / this.maxItemsPerPage;
+
+        this.inventory.setItem(4, GUI.createItem(Material.EMERALD, "&a&lUser Tags", Chat.color("&7You are viewing their tags.")));
+        this.inventory.setItem(45, GUI.createItem(Material.ARROW, "&7&lBack", Chat.color("&7Click to go back to the manager menu.")));
+        this.inventory.setItem(48, GUI.createItem(Material.FENCE_GATE, "&aPrevious Page", Chat.color("&7Click to go to the previous page.")));
+        this.inventory.setItem(49, GUI.createItem(Material.BLAZE_ROD, "&a&lPage", Chat.color("&7You are on page " + (this.page + 1) + "/" + (this.maxPages + 1))));
+        this.inventory.setItem(50, GUI.createItem(Material.FENCE_GATE, "&aNext Page", Chat.color("&7Click to go to the next page.")));
 
         for (int i = 0; i < this.inventory.getSize(); i++) {
-            if (i < 9) this.inventory.setItem(i, GUI.createItemShort(Material.STAINED_GLASS_PANE, 7, " "));
+            if (i < 9 && this.inventory.getItem(i) == null) this.inventory.setItem(i, GUI.createItemShort(Material.STAINED_GLASS_PANE, 7, " "));
         }
         for (int i = 46; i < this.inventory.getSize(); i++) {
             if (this.inventory.getItem(i) == null) this.inventory.setItem(i, GUI.createItemShort(Material.STAINED_GLASS_PANE, 7, " "));
@@ -58,11 +66,14 @@ public class ManagerTagMenu {
             this.inventory.setItem(22, GUI.createItemShort(Material.INK_SACK, 1, "&cThis user does not have any tags!", Chat.color("&7You are unable to modify nothing.")));
         } else {
             this.inventory.setItem(22, null);
-            this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable User Tag", Chat.color("&7Right click to disable their"), Chat.color("&7current active tag.")));
+            this.inventory.setItem(53, GUI.createItem(Material.BARRIER, "&c&lDisable User Tag", Chat.color("&7Click to disable their"), Chat.color("&7current active tag.")));
 
-            for (int i = 0; i < playerTags.size(); i++) {
+            for (int i = 0; i < this.maxItemsPerPage; i++) {
                 int itemIndex = this.maxItemsPerPage * page + i;
-                this.inventory.addItem(GUI.createItem(Material.NAME_TAG, "&a» " + playerTags.get(itemIndex), "", Chat.color("&c&o(Right click to revoke from user!)")));
+                if (itemIndex >= playerTags.size()) break;
+                if (playerTags.get(itemIndex) != null) {
+                    this.inventory.addItem(GUI.createItem(Material.NAME_TAG, "&a» " + playerTags.get(itemIndex), "", Chat.color("&7&o(Click to revoke from user)")));
+                }
             };
         }
     }
@@ -92,11 +103,25 @@ public class ManagerTagMenu {
                     clicker.closeInventory();
 
                     this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> {
-                        ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerTagMenu");
-                        managerTagMenu.open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner);
+                        open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner);
                     }, 10);
                 }
                 break;
+
+        case FENCE_GATE:
+            if (ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName()).contains("Next Page")) {
+                if (this.page < this.maxPages) {
+                    this.page += 1;
+                    open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner);
+                }
+            }
+            else if (ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName()).contains("Previous Page")) {
+                if (this.page > 0) {
+                    this.page -= 1;
+                    open(clicker, this.instance.tags.fetchTags(this.tagOwner), this.tagOwner);
+                }
+            }
+            break;
 
             case ARROW:
                 clicker.closeInventory();

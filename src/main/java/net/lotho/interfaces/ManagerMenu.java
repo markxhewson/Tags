@@ -78,19 +78,38 @@ public class ManagerMenu {
             case BEACON:
                 new AnvilGUI.Builder()
                         .onComplete((player, text) -> {
-                            try {
-                                this.instance.mojang.fetchPlayerUUID(text.toLowerCase());
-                            } catch (UnirestException e) {
-                                e.printStackTrace();
-                            }
+                            UUID[] uuid = new UUID[1];
+                            if (this.instance.playerUUIDs.get(text.toLowerCase()) == null) {
+                                try {
+                                    this.instance.mojang.fetchPlayerUUID(text.toLowerCase());
+                                } catch (UnirestException e) {
+                                    e.printStackTrace();
+                                }
 
-                            this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> {
-                                UUID uuid = this.instance.playerUUIDs.get(text.toLowerCase());
-                                if (uuid != null) {
-                                    boolean playerExists = this.instance.tags.checkUser(uuid);
+                                this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> {
+                                    uuid[0] = this.instance.playerUUIDs.get(text.toLowerCase());
+
+                                    if (uuid[0] != null) {
+                                        boolean playerExists = this.instance.tags.checkUser(uuid[0]);
+                                        if (playerExists) {
+                                            ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerTagMenu");
+                                            managerTagMenu.open(clicker, this.instance.tags.fetchTags(uuid[0]), uuid[0]);
+                                            this.instance.playerInterfaces.get(clicker.getUniqueId()).put("managerTagMenu", managerTagMenu);
+                                        } else {
+                                            player.sendMessage(Chat.color("&c&lError! &7I could not find that player in the database."));
+                                        }
+                                    } else {
+                                        player.sendMessage(Chat.color("&c&lError! &7I could not find a player with that username."));
+                                    }
+                                },20);
+                            } else {
+                                uuid[0] = this.instance.playerUUIDs.get(text.toLowerCase());
+
+                                if (uuid[0] != null) {
+                                    boolean playerExists = this.instance.tags.checkUser(uuid[0]);
                                     if (playerExists) {
                                         ManagerTagMenu managerTagMenu = (ManagerTagMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("managerTagMenu");
-                                        managerTagMenu.open(clicker, this.instance.tags.fetchTags(uuid), uuid);
+                                        managerTagMenu.open(clicker, this.instance.tags.fetchTags(uuid[0]), uuid[0]);
                                         this.instance.playerInterfaces.get(clicker.getUniqueId()).put("managerTagMenu", managerTagMenu);
                                     } else {
                                         player.sendMessage(Chat.color("&c&lError! &7I could not find that player in the database."));
@@ -98,8 +117,8 @@ public class ManagerMenu {
                                 } else {
                                     player.sendMessage(Chat.color("&c&lError! &7I could not find a player with that username."));
                                 }
+                            }
 
-                            }, 20);
 
                             return AnvilGUI.Response.close();
                         })

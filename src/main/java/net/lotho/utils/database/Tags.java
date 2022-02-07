@@ -149,24 +149,27 @@ public class Tags {
     public void tagValidationCheck(String name, Player owner) {
         User user = this.instance.getUserManager().getUser(owner);
 
-        if (name.length() > 15) {
-            owner.sendMessage(Chat.color("&c&lError! &7Your tag is too long! Please choose another tag name."));
+        if (name.length() < 3) {
+            owner.sendMessage(Chat.color("&c&lError! &7You tag is too short, it must be greater than two characters."));
         } else {
-            if (!checkTagExists(name)) {
-                boolean isTagBlocked = this.instance.tags.isTagBlocked(name);
-
-                if (!isTagBlocked) {
-                    user.getData().setTokens(user.getData().getTokens() -1);
-                    owner.sendMessage(Chat.color("&a&lSuccess! &7You have created the &c" + name + " &7tag!"));
-
-                    createTag(name, owner);
-                } else {
-                    owner.sendMessage(Chat.color("&c&lError! &7That tag has been blocked by server administrators."));
-                }
+            if (name.length() > 15) {
+                owner.sendMessage(Chat.color("&c&lError! &7Your tag is too long! It must be less than 15 characters."));
             } else {
-                owner.sendMessage(Chat.color("&c&lError! &7You already have a tag with that name!"));
-            }
+                if (!checkTagExists(name)) {
+                    boolean isTagBlocked = this.instance.tags.isTagBlocked(name);
 
+                    if (!isTagBlocked) {
+                        user.getData().setTokens(user.getData().getTokens() -1);
+                        owner.sendMessage(Chat.color("&a&lSuccess! &7You have created the &c" + name + " &7tag!"));
+
+                        createTag(name, owner);
+                    } else {
+                        owner.sendMessage(Chat.color("&c&lError! &7That tag has been blocked by server administrators."));
+                    }
+                } else {
+                    owner.sendMessage(Chat.color("&c&lError! &7You already have a tag with that name!"));
+                }
+            }
         }
     }
 

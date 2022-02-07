@@ -85,7 +85,7 @@ public class TokensMenu {
 
 
                 TagsMenu tagsMenu = (TagsMenu) this.instance.playerInterfaces.get(clicker.getUniqueId()).get("tagsMenu");
-                tagsMenu.open(clicker);
+                this.instance.getServer().getScheduler().runTaskLaterAsynchronously(this.instance, () -> tagsMenu.open(clicker), 7);
                 break;
 
             case BARRIER: // manager functions for tags

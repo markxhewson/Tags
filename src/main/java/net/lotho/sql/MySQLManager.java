@@ -18,7 +18,7 @@ public class MySQLManager extends Manager {
         super(instance);
         this.instance = instance;
 
-        this.databaseURL = this.instance.configManager.getConfigFile().getString("database.local-url");
+        this.databaseURL = this.instance.configManager.getConfigFile().getString("database.url");
 
         this.connect();
         this.createTables();
