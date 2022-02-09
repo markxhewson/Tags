@@ -101,7 +101,7 @@ public class ManagerMenu {
                                     } else {
                                         player.sendMessage(Chat.color("&c&lError! &7I could not find a player with that username."));
                                     }
-                                },20);
+                                },25);
                             } else {
                                 uuid[0] = this.instance.playerUUIDs.get(text.toLowerCase());
 

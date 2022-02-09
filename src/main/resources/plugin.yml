@@ -3,6 +3,8 @@ version: '${project.version}'
 main: net.lotho.Azazel
 api-version: 1.18
 authors: [ Lotho ]
+softdepend:
+  - PlaceholderAPI
 
 commands:
   tags:

@@ -15,6 +15,7 @@ import net.lotho.profiles.User;
 import net.lotho.profiles.UserManager;
 import net.lotho.sql.MySQLManager;
 import net.lotho.utils.api.Mojang;
+import net.lotho.utils.api.Placeholders;
 import net.lotho.utils.database.Tags;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -42,6 +43,13 @@ public final class Azazel extends JavaPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
+
+        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            this.getServer().getConsoleSender().sendMessage("PlaceholderAPI Placeholders enabled.");
+            new Placeholders(this).register();
+        } else {
+            this.getServer().getConsoleSender().sendMessage("Nah");
+        }
 
         instance = this;
         configManager = new ConfigManager(this);

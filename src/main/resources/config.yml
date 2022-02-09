@@ -1,5 +1,7 @@
+debug:
+  local-db: "jdbc:mysql://localhost:3306/tags?characterEncoding=utf8"
+
 database:
-  local-url: "jdbc:mysql://localhost:3306/tags?characterEncoding=utf8"
   url: "jdbc:mysql://192.168.0.129:3306/tags?characterEncoding=utf8"
   username: 'admin'
   password: 'admin2'

@@ -72,7 +72,7 @@ public class ManagerTagMenu {
                 int itemIndex = this.maxItemsPerPage * page + i;
                 if (itemIndex >= playerTags.size()) break;
                 if (playerTags.get(itemIndex) != null) {
-                    this.inventory.addItem(GUI.createItem(Material.NAME_TAG, "&a» " + playerTags.get(itemIndex), "", Chat.color("&7&o(Click to revoke from user)")));
+                    this.inventory.addItem(GUI.createItem(Material.NAME_TAG, "&a» " + playerTags.get(itemIndex), "", Chat.color("&c&o(Click to revoke from user)")));
                 }
             };
         }
