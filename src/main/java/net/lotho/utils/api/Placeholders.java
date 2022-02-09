@@ -34,7 +34,7 @@ public class Placeholders extends PlaceholderExpansion {
 
         switch (params.toLowerCase()) {
             case "tag":
-                return user.getData().getActiveTag() == null ? "N/A" : user.getData().getActiveTag();
+                return user.getData().getActiveTag() == null ? "" : user.getData().getActiveTag();
 
             case "tokens":
                 return user.getData().getTokens().toString();
