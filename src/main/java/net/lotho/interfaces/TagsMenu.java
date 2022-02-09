@@ -75,17 +75,16 @@ public class TagsMenu {
     }
 
     public void handleClick(Inventory inventory, Player clicker, ItemStack clickedItem, int slot) {
+        User user;
         switch (clickedItem.getType()) {
             case NAME_TAG:
-                if (slot > 8) { // checks if tag is valid and not a filler item in gui
-                    String tagName = clickedItem.getItemMeta().getDisplayName().split(" ")[1];
+                String tagName = clickedItem.getItemMeta().getDisplayName().split(" ")[1];
 
-                    User user = this.instance.getUserManager().getUser(clicker);
-                    user.getData().setActiveTag(tagName);
+                user = this.instance.getUserManager().getUser(clicker);
+                user.getData().setActiveTag(tagName);
 
-                    clicker.sendMessage(Chat.color("&a&lSuccess! &7You have successfully activated the &c" + tagName + "&r &7tag!"));
-                    clicker.closeInventory();
-                }
+                clicker.sendMessage(Chat.color("&a&lSuccess! &7You have successfully activated the &c" + tagName + "&r &7tag!"));
+                clicker.closeInventory();
                 break;
 
             case FENCE_GATE:
@@ -111,7 +110,7 @@ public class TagsMenu {
                 break;
 
             case BARRIER:
-                User user = this.instance.getUserManager().getUser(clicker);
+                user = this.instance.getUserManager().getUser(clicker);
                 if (user.getData().getActiveTag() == null) {
                     clicker.sendMessage(Chat.color("&c&lError! &7You do not have a tag activated."));
                 } else {

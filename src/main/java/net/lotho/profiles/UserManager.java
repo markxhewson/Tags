@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class UserManager extends Manager {
-    private Map<UUID, User> users = new HashMap<>();
+    private final Map<UUID, User> users = new HashMap<>();
 
     public UserManager(Azazel instance) {
         super(instance);
